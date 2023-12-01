@@ -1,0 +1,10 @@
+{
+    "require": {
+        "google/cloud-firestore": "^1.37"
+    },
+    "autoload": {
+        "psr-4": {
+            "App\\": "App"
+        }
+    }
+}
