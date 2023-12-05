@@ -13,13 +13,14 @@ $db = new Firestore();
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Mapa</title>    
+    <title>Mapa</title>
+    <link rel="stylesheet" href="css/style.css">
     <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDB6gjDsE59yK8vQS22FFrfabHSb6qOGHU&callback=initMap" 
-    async defer></script>    
+    async defer></script>
 </head>
 <body>    
-    <div id="map" style="height: 300px"></div>
-    
-    <script src="js/script.js"></script>
+    <div id="map" style="height: 500px"></div>
+    <div id="info"></div>
+    <script src="js/script.js" defer></script>
 </body>
 </html>
