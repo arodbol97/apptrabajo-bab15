@@ -21,6 +21,9 @@ $db = new Firestore();
 <body>    
     <div id="map" style="height: 500px"></div>
     <div id="info"></div>
+    <div>
+        <button onclick="currentLocation(findMe)">Encuéntrame</button>        
+    </div>
     <script src="js/script.js" defer></script>
 </body>
 </html>

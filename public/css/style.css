@@ -1,24 +1,35 @@
+#info {
+  display: flex;
+}
+
 table {
-    width: 50%;
-    border-collapse: collapse;
-    margin-bottom: 20px;
-  }
+  margin: 5%;
+  width: 40%;
+  border-collapse: collapse;
+  margin-bottom: 20px;
+}
 
-  th, td {
-    border: 1px solid black;
-    padding: 8px;
-    text-align: left;
-  }
+th, td {
+  border: 1px solid black;
+  padding: 8px;
+  text-align: left;
+}
 
-  th {
-    background-color: #C0C0C0;
-  }
+th {
+  background-color: #C0C0C0;
+}
 
-  tbody tr :hover{
-    background-color: lightseagreen;
-    cursor: pointer;
-  }
+#pointsTable tbody tr :hover{
+  background-color: blue;
+  color: white;
+  cursor: pointer;
+}
 
-  .selectedRow{
-    background-color: lightseagreen;
-  }
+.selectedRow{
+  background-color: blue;
+  color: white;
+}
+
+audio {
+  width: 100%;
+}
