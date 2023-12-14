@@ -1,3 +1,22 @@
+html {
+  height: 100%;
+}
+
+body {
+  margin: 0;
+  height: 100%;
+}
+
+header {
+  height: 10%;
+  background-color: #57c2ec;
+}
+
+#map {
+  height: 90%;
+  display: none;
+}
+
 #info {
   display: flex;
 }

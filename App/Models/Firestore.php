@@ -11,10 +11,14 @@ class Firestore {
     private FirestoreClient $firestore;
 
     public function __construct(){
-        $this->firestore = new FirestoreClient([
-            "keyFilePath" => __DIR__ . DIRECTORY_SEPARATOR ."/../config/apptrabajo-bab15-firebase-adminsdk-awlep-62a1067c5b.json",
-            "projectId" => "apptrabajo-bab15",
-        ]);
+        try {
+            $this->firestore = new FirestoreClient([
+                "keyFilePath" => __DIR__ . "/../config/apptrabajo-bab15-firebase-adminsdk-awlep-62a1067c5b.json",
+                "projectId" => "apptrabajo-bab15",
+            ]);
+        } catch (\Exception $e) {
+            die('Firestore initialization error: ' . $e->getMessage() . ' ' . $e->getCode() . ' ' . $e->getTraceAsString());
+        }
     }
 
     public function dumpDataToJson(){
@@ -24,9 +28,9 @@ class Firestore {
         $data = [];
 
         foreach ($monuments as $monument) {
-            $data["monuments"] [] = $monument->data();            
+            $data["monuments"] [] = $monument->data();
         }
-        foreach ($routes as $route) {            
+        foreach ($routes as $route) {
             $data["routes"] [] = $route->data();
         }
 

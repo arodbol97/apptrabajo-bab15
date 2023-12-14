@@ -1,6 +1,7 @@
 let map;
 let myWayBack = null;
 let markers = [];
+let userPoint;
 let polyline = "";
 let routes = [];
 let pointCoords;
@@ -46,11 +47,14 @@ function initMap() {
                 { "color": "#808080" }
               ]
             },
-          ]
+          ],
+          disableDefaultUI: true
     };
     
     // Create the map
     map = new google.maps.Map(document.getElementById('map'), mapOptions);
+    
+    currentLocation(findMe);
 
     // Fetch data from firestore
     fetchData();
@@ -82,7 +86,6 @@ function addMarkers(routeId) {
             fillOpacity: 0.35,
             map: map
         });
-
         
         //Click on map point
         google.maps.event.addListener(newMarker, 'click', function(event) {
@@ -141,33 +144,13 @@ function locateRoute(route) {
             pointCoords.push({lat:point["latitude"],lng:point["longitude"]})
         });       
     
-        /*polyline = new google.maps.Polyline({
+        polyline = new google.maps.Polyline({
             path: pointCoords,
             geodesic: true,
             strokeColor: '#FF0000',
             strokeOpacity: 1.0,
             strokeWeight: 2,
             map: map
-        });*/
-
-        const directionsService = new google.maps.DirectionsService();
-        const directionsRenderer = new google.maps.DirectionsRenderer({ map: map , suppressMarkers: true });
-
-        const waypoints = pointCoords.slice(1, -1).map(point => ({ location: new google.maps.LatLng(point.lat, point.lng) }));
-
-        const request = {
-            origin: new google.maps.LatLng(pointCoords[0].lat, pointCoords[0].lng),
-            destination: new google.maps.LatLng(pointCoords[pointCoords.length - 1].lat, pointCoords[pointCoords.length - 1].lng),
-            waypoints: waypoints,
-            travelMode: google.maps.TravelMode.WALKING,
-        };
-
-        directionsService.route(request, (result, status) => {
-            if (status === 'OK') {
-            directionsRenderer.setDirections(result);
-            } else {
-            console.error(`Directions request failed with status: ${status}`);
-            }
         });
 
         let bounds = new google.maps.LatLngBounds();
@@ -248,6 +231,8 @@ function handleData(data){
 }
 
 function selectRoute(routeId){
+    document.getElementById("map").style.display = "block";
+    document.getElementById("info").style.display = "none";
     selectedRoute = routes.find(obj => obj.id === routeId);
     infoDiv = document.getElementById("info");
     addMarkers(routeId);
@@ -383,7 +368,7 @@ function currentLocation(callback){
             var longitude = position.coords.longitude;            
     
             // Create a LatLng object with the coordinates
-            latLng = new google.maps.LatLng(latitude, longitude);
+            latLng = {lat: latitude, lng: longitude};
             callback(latLng);
         }, function(error) {
           console.log('Error getting user location:', error.message);
@@ -394,45 +379,26 @@ function currentLocation(callback){
 }
 
 function findMe(latLng){
-    if(myWayBack != null){
-        removeWayBack();
-    }
-    map.panTo(latLng);
 
-    let closestDistance = Number.MAX_VALUE;
-    let closestPoint = null;
-
-    pointCoords.forEach(function(point) {
-      let pointLatLng = new google.maps.LatLng(point.lat, point.lng);
-      let distance = google.maps.geometry.spherical.computeDistanceBetween(latLng, pointLatLng);
-
-      if (distance < closestDistance) {
-        closestDistance = distance;
-        closestPoint = pointLatLng;
-      }
-    });
-
-    let directionsService = new google.maps.DirectionsService();
-    myWayBack = new google.maps.DirectionsRenderer({
-      map: map
-    });
-
-    let request = {
-      origin: latLng,
-      destination: closestPoint,
-      travelMode: 'WALKING'
+    let deviceIcon = {
+        url: '../deviceIcon.png',
+        scaledSize: new google.maps.Size(20, 20) // Adjust the size as needed
     };
 
-    directionsService.route(request, function(result, status) {
-      if (status === 'OK') {
-        myWayBack.setDirections(result);
-      } else {
-        console.log('Directions request failed due to ' + status);
-      }
+    userPoint = new google.maps.Marker({        
+        map: map,
+        position: latLng,        
+        icon: deviceIcon
     });
-}
 
-function removeWayBack(){
-    myWayBack.setDirections({ routes: [] });
-    myWayBack = null;
+    navigator.geolocation.watchPosition(function (position) {
+        var userLatLng = {
+            lat: position.coords.latitude,
+            lng: position.coords.longitude
+        };
+
+        // Update the circle's position
+        userPoint.setPosition(userLatLng);
+    });
+
 }

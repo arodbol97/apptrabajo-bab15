@@ -1,3 +1,4 @@
 <header>
-    <div style="height:200px"></div>
+    <div id="navMenu"></div>
+    <div id="navUser"></div>
 </header>
